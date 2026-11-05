@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Master Pro</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #0b1020;
+    --card: #151c32;
+    --text: #ffffff;
+    --muted: #a5b0cf;
+    --primary: #8b5cf6;
+    --secondary: #06b6d4;
+    --pink: #ec4899;
+    --green: #22c55e;
+    --border: rgba(255,255,255,0.09);
+}
+
+.light-mode {
+    --bg: #f3f5ff;
+    --card: #ffffff;
+    --text: #17172b;
+    --muted: #667085;
+    --border: rgba(0,0,0,0.09);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: 0.3s;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* NAVBAR */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 25px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #8b5cf6, #06b6d4, #ec4899);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn {
+    background: var(--bg);
+    color: var(--text);
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-size: 17px;
+}
+
+/* HERO */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    padding: 45px 35px;
+    border-radius: 25px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #6428c9, #2563eb, #db2777);
+    box-shadow: 0 15px 45px rgba(99, 50, 230, 0.25);
+}
+
+.hero h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    font-size: 15px;
+    opacity: 0.9;
+    margin-bottom: 25px;
+    max-width: 600px;
+}
+
+.hero-btn {
+    background: white;
+    color: #5422b5;
+    padding: 13px 25px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* STATS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+}
+
+.stat-card h2 {
+    font-size: 28px;
+    color: var(--secondary);
+}
+
+.stat-card p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* SUBJECTS */
+
+.section-title {
+    font-size: 23px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.search-box {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 15px 18px;
+    border-radius: 14px;
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+    margin-bottom: 22px;
+}
+
+.search-box:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.category-card {
+    position: relative;
+    overflow: hidden;
+    padding: 22px;
+    border-radius: 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(139,92,246,0.15);
+}
+
+.category-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 27px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    margin-bottom: 15px;
+}
+
+.category-card h3 {
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.category-card p {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* QUIZ */
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.timer {
+    background: rgba(236,72,153,0.15);
+    color: #ec4899;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.progress-container {
+    height: 9px;
+    background: var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+    transition: 0.3s;
+}
+
+.quiz-card {
+    background: var(--card);
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+}
+
+.question-number {
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.question-text {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.options {
+    display: grid;
+    gap: 13px;
+}
+
+.option {
+    padding: 16px;
+    border-radius: 13px;
+    text-align: left;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    transition: 0.2s;
+}
+
+.option:hover {
+    border-color: var(--primary);
+    transform: translateX(3px);
+}
+
+.option.correct {
+    background: rgba(34,197,94,0.15);
+    border-color: #22c55e;
+}
+
+.option.wrong {
+    background: rgba(239,68,68,0.15);
+    border-color: #ef4444;
+}
+
+.quiz-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.primary-btn {
+    padding: 13px 24px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    background: linear-gradient(135deg, #8b5cf6, #2563eb);
+}
+
+.primary-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* RESULT */
+
+.result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    padding: 35px;
+    text-align: center;
+}
+
+.result-score {
+    font-size: 55px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin: 20px 0;
+}
+
+.result-message {
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:900px) {
+    .categories {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media(max-width:600px) {
+    .container {
+        padding: 12px;
+    }
+
+    .navbar {
+        padding: 15px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .hero {
+        padding: 30px 22px;
+    }
+
+    .stats {
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px 8px;
+    }
+
+    .stat-card h2 {
+        font-size: 23px;
+    }
+
+    .categories {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .category-card {
+        padding: 16px;
+    }
+
+    .quiz-card {
+        padding: 20px;
+    }
+
+    .question-text {
+        font-size: 19px;
+    }
+}
+
+/* ===== FOUNDERS DESIGN ===== */
+
+.founders-section {
+    padding: 40px 20px;
+    margin-top: 25px;
+    text-align: center;
+}
+
+.founders-title {
+    font-size: 35px;
+    font-weight: 800;
+    background: linear-gradient(90deg,#a855f7,#06b6d4,#ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+}
+
+.founders-subtitle {
+    color: var(--muted);
+    margin-bottom: 35px;
+}
+
+.founders-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 25px;
+    max-width: 750px;
+    margin: auto;
+}
+
+.founder-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 25px 18px;
+    transition: 0.3s;
+}
+
+.founder-card:hover {
+    transform: translateY(-5px);
+    border-color: #a855f7;
+    box-shadow: 0 0 25px #a855f733;
+}
+
+/* SMALL ROUND FOUNDER PHOTOS */
+
+.founder-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    border: 3px solid #8b5cf6;
+    padding: 3px;
+    background: var(--card);
+    display: block;
+    margin: 0 auto 18px;
+    box-shadow: 0 0 15px rgba(139,92,246,0.25);
+    transition: 0.3s;
+}
+
+.founder-card:hover .founder-photo {
+    transform: scale(1.05);
+    box-shadow: 0 0 22px rgba(139,92,246,0.5);
+}
+
+.founder-role {
+    display: inline-block;
+    padding: 7px 15px;
+    border-radius: 20px;
+    background: linear-gradient(90deg,#7c3aed,#2563eb);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.founder-name {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.founder-usn {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.founder-location {
+    color: #06b6d4;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.founder-quote {
+    color: var(--muted);
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 12px;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media(max-width:600px) {
+
+    .founders-section {
+        padding: 30px 10px;
+    }
+
+    .founders-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 12px;
+    }
+
+    .founder-card {
+        padding: 18px 8px;
+        border-radius: 16px;
+    }
+
+    .founder-photo {
+        width: 75px;
+        height: 75px;
+        margin-bottom: 12px;
+    }
+
+    .founder-name {
+        font-size: 16px;
+    }
+
+    .founder-role {
+        font-size: 10px;
+        padding: 6px 9px;
+    }
+
+    .founder-usn,
+    .founder-location,
+    .founder-quote {
+        font-size: 10px;
+    }
+
+    .founders-title {
+        font-size: 27px;
+    }
+
+    .founders-subtitle {
+        font-size: 12px;
+    }
+}
+
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+    <div class="logo">🎯 Quiz Master</div>
+
+    <div class="nav-actions">
+        <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">
+            🌙
+        </button>
+    </div>
+</header>
+
+<!-- HOME PAGE -->
+
+<section id="homePage" class="page active">
+
+    <div class="hero">
+        <h1>Challenge Your Mind 🚀</h1>
+
+        <p>
+            Learn something new every day.
+            Test your knowledge, improve your skills
+            and become a Quiz Master!
+        </p>
+
+        <button class="hero-btn" onclick="scrollToSubjects()">
+            Start Quiz ⚡
+        </button>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h2 id="totalQuestions">750+</h2>
+            <p>Questions</p>
+        </div>
+
+        <div class="stat-card">
+            <h2 id="totalSubjects">50+</h2>
+            <p>Subjects</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>100%</h2>
+            <p>Fun Learning</p>
+        </div>
+
+    </div>
+
+    <h2 class="section-title" id="subjectsSection">
+        📚 Explore Subjects
+    </h2>
+
+    <input
+        type="text"
+        id="searchInput"
+        class="search-box"
+        placeholder="🔍 Search any subject..."
+        oninput="searchCategories()"
+    >
+
+    <div class="categories" id="categoriesContainer">
+    </div>
+
+</section>
+  
+<!-- ===== FOUNDERS SECTION ===== -->
+
+<section class="founders-section">
+
+    <h2 class="founders-title">
+        ✨ Meet Our Founders
+    </h2>
+
+    <p class="founders-subtitle">
+        The brilliant minds behind Quiz Master Pro
+    </p>
+
+    <div class="founders-grid">
+
+        <div class="founder-card">
+
+            <img src="images/Priti1.jpg" class="founder-photo" alt="Priti">
+            <span class="founder-role">👑 FOUNDER</span>
+
+            <h3 class="founder-name">Priti</h3>
+
+            <p class="founder-usn">USN: 3GU24CS034</p>
+
+            <p class="founder-location">📍 Bidar, Karnataka</p>
+
+            <p class="founder-quote">
+                "Turning innovative ideas into reality."
+            </p>
+
+        </div>
+
+        <div class="founder-card">
+
+            <img src="images/Bhagyashree1.jpg" class="founder-photo" alt="Bhagyashree">
+
+            <span class="founder-role">🚀 CO-FOUNDER</span>
+
+            <h3 class="founder-name">Bhagyashree</h3>
+
+            <p class="founder-usn">USN: 3GU24CS007</p>
+
+            <p class="founder-location">📍 Bidar, Karnataka</p>
+
+            <p class="founder-quote">
+                "Building a smarter and better learning experience."
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- QUIZ PAGE -->
+
+<section id="quizPage" class="page">
+
+    <div class="quiz-header">
+        <button class="nav-btn" onclick="goHome()">← Back</button>
+
+        <h3 id="quizCategory">Subject</h3>
+
+        <div class="timer" id="timer">⏱ 30</div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="quiz-card">
+
+        <div class="question-number" id="questionNumber">
+            Question 1
+        </div>
+
+        <h2 class="question-text" id="questionText">
+            Loading question...
+        </h2>
+
+        <div class="options" id="optionsContainer">
+        </div>
+
+        <div class="quiz-footer">
+
+            <p id="scoreDisplay">Score: 0</p>
+
+            <button class="primary-btn" id="nextBtn" onclick="nextQuestion()">
+                Next →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- RESULT PAGE -->
+
+<section id="resultPage" class="page">
+
+    <div class="result-card">
+
+        <h1>🎉 Quiz Completed!</h1>
+
+        <div class="result-score" id="finalScore">
+            0 / 15
+        </div>
+
+        <p class="result-message" id="resultMessage">
+            Great job!
+        </p>
+
+        <button class="primary-btn" onclick="goHome()">
+            🏠 Back to Home
+        </button>
+
+    </div>
+
+</section>
+
+</div>
+
+<script>
+  // ==========================================
+// PART 2 — SUBJECTS + QUESTION DATABASE
+// ==========================================
+
+const categories = [
+    {name:"General Knowledge",icon:"🌍"},
+    {name:"Indian GK",icon:"🇮🇳"},
+    {name:"World History",icon:"🏛️"},
+    {name:"Indian History",icon:"📜"},
+    {name:"Geography",icon:"🌎"},
+    {name:"Indian Geography",icon:"🗺️"},
+    {name:"Science",icon:"🔬"},
+    {name:"Physics",icon:"⚛️"},
+    {name:"Chemistry",icon:"🧪"},
+    {name:"Biology",icon:"🧬"},
+    {name:"Mathematics",icon:"➗"},
+    {name:"Advanced Mathematics",icon:"📐"},
+    {name:"Computer Science",icon:"💻"},
+    {name:"Programming",icon:"👨‍💻"},
+    {name:"C Programming",icon:"🔵"},
+    {name:"C++ Programming",icon:"🟣"},
+    {name:"Java Programming",icon:"☕"},
+    {name:"Python Programming",icon:"🐍"},
+    {name:"Web Development",icon:"🌐"},
+    {name:"Database Management",icon:"🗄️"},
+    {name:"Operating Systems",icon:"🖥️"},
+    {name:"Computer Networks",icon:"📡"},
+    {name:"Software Engineering",icon:"⚙️"},
+    {name:"Data Structures",icon:"🌳"},
+    {name:"Algorithms",icon:"🧩"},
+    {name:"Artificial Intelligence",icon:"🤖"},
+    {name:"Machine Learning",icon:"🧠"},
+    {name:"Deep Learning",icon:"🕸️"},
+    {name:"Data Science",icon:"📊"},
+    {name:"Cybersecurity",icon:"🔐"},
+    {name:"Ethical Hacking",icon:"🛡️"},
+    {name:"Cloud Computing",icon:"☁️"},
+    {name:"Blockchain",icon:"⛓️"},
+    {name:"Internet of Things",icon:"📱"},
+    {name:"Robotics",icon:"🦾"},
+    {name:"Electronics",icon:"🔌"},
+    {name:"Digital Electronics",icon:"💡"},
+    {name:"Electrical Engineering",icon:"⚡"},
+    {name:"Mechanical Engineering",icon:"🔧"},
+    {name:"Civil Engineering",icon:"🏗️"},
+    {name:"English Grammar",icon:"📝"},
+    {name:"English Vocabulary",icon:"📖"},
+    {name:"Reasoning",icon:"🧩"},
+    {name:"Quantitative Aptitude",icon:"🔢"},
+    {name:"Verbal Ability",icon:"💬"},
+    {name:"Competitive Exams",icon:"🏆"},
+    {name:"Indian Constitution",icon:"⚖️"},
+    {name:"Economics",icon:"📈"},
+    {name:"Business Studies",icon:"💼"},
+    {name:"Finance",icon:"💰"},
+    {name:"Sports",icon:"🏏"},
+    {name:"Current Affairs",icon:"📰"},
+    {name:"Environment",icon:"🌱"}
+];
+
+
+// ==========================================
+// QUESTION BANK
+// Each question: question, options, answer, explanation
+// answer = correct option index (0-3)
+// ==========================================
+
+const quizDatabase = {
+
+"General Knowledge":[
+{question:"Which is the largest planet in our Solar System?",options:["Earth","Jupiter","Saturn","Mars"],answer:1,explanation:"Jupiter is the largest planet in our Solar System."},
+{question:"How many continents are there on Earth?",options:["5","6","7","8"],answer:2,explanation:"Earth has seven continents."},
+{question:"Which is the fastest land animal?",options:["Lion","Horse","Cheetah","Tiger"],answer:2,explanation:"The cheetah can reach speeds of around 100–120 km/h."},
+{question:"What is the capital of Japan?",options:["Seoul","Beijing","Tokyo","Bangkok"],answer:2,explanation:"Tokyo is the capital of Japan."},
+{question:"Which ocean is the largest?",options:["Atlantic","Indian","Arctic","Pacific"],answer:3,explanation:"The Pacific Ocean is the largest."},
+{question:"Which gas do plants absorb?",options:["Oxygen","Carbon dioxide","Nitrogen","Hydrogen"],answer:1,explanation:"Plants absorb carbon dioxide during photosynthesis."},
+{question:"Who invented the telephone?",options:["Newton","Alexander Graham Bell","Edison","Tesla"],answer:1,explanation:"Alexander Graham Bell is credited with inventing the telephone."},
+{question:"Which is the smallest prime number?",options:["0","1","2","3"],answer:2,explanation:"2 is the smallest prime number and the only even prime."},
+{question:"How many days are there in a leap year?",options:["364","365","366","367"],answer:2,explanation:"A leap year contains 366 days."},
+{question:"Which organ pumps blood?",options:["Lungs","Brain","Heart","Kidney"],answer:2,explanation:"The heart pumps blood throughout the body."},
+{question:"Which country is called the Land of the Rising Sun?",options:["China","Japan","Thailand","India"],answer:1,explanation:"Japan is traditionally called the Land of the Rising Sun."},
+{question:"What is the currency of the United Kingdom?",options:["Euro","Dollar","Pound sterling","Yen"],answer:2,explanation:"The UK uses the pound sterling."},
+{question:"Which is the hardest natural substance?",options:["Gold","Iron","Diamond","Quartz"],answer:2,explanation:"Diamond is the hardest naturally occurring material."},
+{question:"Which planet is known as the Red Planet?",options:["Venus","Mars","Mercury","Neptune"],answer:1,explanation:"Iron oxide on Mars gives it its reddish appearance."},
+{question:"How many hours are there in one day?",options:["12","18","24","36"],answer:2,explanation:"A standard day has 24 hours."}
+],
+
+"Indian GK":[
+{question:"What is the capital of India?",options:["Mumbai","New Delhi","Chennai","Kolkata"],answer:1,explanation:"New Delhi is India's capital."},
+{question:"Who is known as the Father of the Nation in India?",options:["Nehru","Sardar Patel","Mahatma Gandhi","Bose"],answer:2,explanation:"Mahatma Gandhi is popularly known as the Father of the Nation."},
+{question:"Which is India's national animal?",options:["Lion","Tiger","Elephant","Leopard"],answer:1,explanation:"The Bengal tiger is India's national animal."},
+{question:"What is India's national flower?",options:["Rose","Lotus","Sunflower","Jasmine"],answer:1,explanation:"Lotus is India's national flower."},
+{question:"Which is the longest river in India?",options:["Yamuna","Godavari","Ganga","Narmada"],answer:2,explanation:"The Ganga is generally considered India's longest river."},
+{question:"Who was India's first Prime Minister?",options:["Rajendra Prasad","Jawaharlal Nehru","Lal Bahadur Shastri","Sardar Patel"],answer:1,explanation:"Jawaharlal Nehru became India's first Prime Minister."},
+{question:"When did India become a Republic?",options:["1947","1948","1950","1952"],answer:2,explanation:"India became a Republic on 26 January 1950."},
+{question:"What is the national anthem of India?",options:["Vande Mataram","Jana Gana Mana","Saare Jahan Se Achha","Ae Mere Watan"],answer:1,explanation:"Jana Gana Mana is India's national anthem."},
+{question:"Which is the largest Indian state by area?",options:["Maharashtra","Uttar Pradesh","Rajasthan","Madhya Pradesh"],answer:2,explanation:"Rajasthan is the largest Indian state by area."},
+{question:"Who wrote India's national anthem?",options:["Bankim Chandra","Rabindranath Tagore","Sarojini Naidu","Premchand"],answer:1,explanation:"Rabindranath Tagore wrote Jana Gana Mana."},
+{question:"Which city is called the Pink City?",options:["Jodhpur","Jaipur","Udaipur","Delhi"],answer:1,explanation:"Jaipur in Rajasthan is known as the Pink City."},
+{question:"Where is the Gateway of India located?",options:["Delhi","Pune","Mumbai","Surat"],answer:2,explanation:"The Gateway of India is in Mumbai."},
+{question:"Which is India's highest civilian award?",options:["Padma Shri","Padma Bhushan","Bharat Ratna","Param Vir Chakra"],answer:2,explanation:"Bharat Ratna is India's highest civilian award."},
+{question:"Who was the first President of India?",options:["S. Radhakrishnan","Rajendra Prasad","Zakir Hussain","V. V. Giri"],answer:1,explanation:"Dr. Rajendra Prasad was India's first President."},
+{question:"Which Indian state has the longest coastline?",options:["Tamil Nadu","Gujarat","Kerala","Karnataka"],answer:1,explanation:"Gujarat has the longest coastline among Indian states."}
+],
+
+"Science":[
+{question:"What is the chemical formula of water?",options:["CO2","H2O","O2","NaCl"],answer:1,explanation:"Water consists of two hydrogen atoms and one oxygen atom."},
+{question:"What is the basic unit of life?",options:["Atom","Tissue","Cell","Organ"],answer:2,explanation:"The cell is the basic structural and functional unit of life."},
+{question:"Which planet is closest to the Sun?",options:["Venus","Earth","Mercury","Mars"],answer:2,explanation:"Mercury is the closest planet to the Sun."},
+{question:"What is the SI unit of force?",options:["Joule","Newton","Watt","Pascal"],answer:1,explanation:"Force is measured in newtons."},
+{question:"Which gas is essential for respiration?",options:["Nitrogen","Oxygen","Carbon dioxide","Helium"],answer:1,explanation:"Most organisms use oxygen for aerobic respiration."},
+{question:"What is the speed of light in vacuum?",options:["300 km/s","3,000 km/s","300,000 km/s","30,000 km/s"],answer:2,explanation:"Light travels at approximately 300,000 km/s in vacuum."},
+{question:"Which vitamin is produced in skin by sunlight?",options:["Vitamin A","Vitamin B12","Vitamin C","Vitamin D"],answer:3,explanation:"UVB exposure helps the skin synthesize vitamin D."},
+{question:"What is the center of an atom called?",options:["Electron","Nucleus","Shell","Proton"],answer:1,explanation:"The nucleus contains protons and neutrons."},
+{question:"Which blood cells fight infections?",options:["Red blood cells","White blood cells","Platelets","Plasma"],answer:1,explanation:"White blood cells help defend the body against infections."},
+{question:"What is the boiling point of water at sea level?",options:["50°C","75°C","100°C","150°C"],answer:2,explanation:"Water boils at 100°C at standard atmospheric pressure."},
+{question:"Which force keeps planets in orbit?",options:["Friction","Magnetism","Gravity","Electricity"],answer:2,explanation:"Gravity keeps planets in orbit around the Sun."},
+{question:"Which part of a plant conducts photosynthesis?",options:["Root","Leaf","Stem only","Flower only"],answer:1,explanation:"Leaves contain chlorophyll and are major sites of photosynthesis."},
+{question:"What is the pH of pure water at 25°C?",options:["3","5","7","10"],answer:2,explanation:"Pure water is neutral with pH approximately 7 at 25°C."},
+{question:"Which instrument measures temperature?",options:["Barometer","Thermometer","Hygrometer","Ammeter"],answer:1,explanation:"A thermometer measures temperature."},
+{question:"Which energy source is renewable?",options:["Coal","Petroleum","Solar energy","Natural gas"],answer:2,explanation:"Solar energy is renewable because sunlight is continually available."}
+],
+
+"Computer Science":[
+{question:"What does CPU stand for?",options:["Central Processing Unit","Computer Personal Unit","Central Program Utility","Control Processing User"],answer:0,explanation:"CPU stands for Central Processing Unit."},
+{question:"Which is a volatile memory?",options:["ROM","Hard Disk","RAM","SSD"],answer:2,explanation:"RAM loses its data when power is switched off."},
+{question:"What is the binary number system base?",options:["2","8","10","16"],answer:0,explanation:"Binary uses two digits: 0 and 1."},
+{question:"Which language is primarily used for web page structure?",options:["HTML","C","Java","SQL"],answer:0,explanation:"HTML defines the structure of web pages."},
+{question:"What does URL stand for?",options:["Uniform Resource Locator","Universal Record Link","User Resource Location","Unified Reference List"],answer:0,explanation:"URL stands for Uniform Resource Locator."},
+{question:"Which device is used to connect networks?",options:["Keyboard","Router","Monitor","Printer"],answer:1,explanation:"A router forwards data between networks."},
+{question:"Which one is an operating system?",options:["Oracle","Linux","Python","Google Chrome"],answer:1,explanation:"Linux is an operating system."},
+{question:"What is the full form of SQL?",options:["Structured Query Language","Simple Question Language","System Query Logic","Sequential Query List"],answer:0,explanation:"SQL stands for Structured Query Language."},
+{question:"Which data structure follows FIFO?",options:["Stack","Queue","Tree","Graph"],answer:1,explanation:"A queue follows First In, First Out."},
+{question:"Which data structure follows LIFO?",options:["Queue","Array","Stack","Linked list"],answer:2,explanation:"A stack follows Last In, First Out."},
+{question:"What does AI stand for?",options:["Automated Internet","Artificial Intelligence","Advanced Interface","Algorithm Integration"],answer:1,explanation:"AI means Artificial Intelligence."},
+{question:"Which is a programming language?",options:["HTTP","Python","HTML only","FTP"],answer:1,explanation:"Python is a general-purpose programming language."},
+{question:"What is the smallest unit of data?",options:["Byte","Bit","Kilobyte","Nibble"],answer:1,explanation:"A bit represents a binary 0 or 1."},
+{question:"Which protocol is used for secure web browsing?",options:["HTTP","FTP","HTTPS","SMTP"],answer:2,explanation:"HTTPS encrypts communication using TLS."},
+{question:"What does LAN stand for?",options:["Local Area Network","Large Access Node","Long Area Network","Logical Array Network"],answer:0,explanation:"LAN stands for Local Area Network."}
+],
+
+"Artificial Intelligence":[
+{question:"What is Artificial Intelligence?",options:["Data storage only","Machines performing intelligent tasks","Only robotics","A type of hardware"],answer:1,explanation:"AI enables systems to perform tasks associated with human intelligence."},
+{question:"Which is a subset of AI?",options:["Machine Learning","HTML","Networking cable","Operating system"],answer:0,explanation:"Machine Learning is a major subset of AI."},
+{question:"What is supervised learning?",options:["Learning without data","Learning from labeled data","Only manual coding","Random guessing"],answer:1,explanation:"Supervised learning uses labeled examples."},
+{question:"Which algorithm is used for classification?",options:["Decision Tree","Bubble Sort","Binary Search","Dijkstra only"],answer:0,explanation:"Decision trees can be used for classification."},
+{question:"What does NLP stand for?",options:["Natural Language Processing","Network Logic Program","Neural Link Protocol","Numeric Learning Process"],answer:0,explanation:"NLP stands for Natural Language Processing."},
+{question:"Which is an example of computer vision?",options:["Image recognition","Text file saving","Disk formatting","Sorting numbers"],answer:0,explanation:"Computer vision extracts information from images and videos."},
+{question:"What is a neural network inspired by?",options:["Human nervous system","Water cycle","Solar system","Mechanical gears"],answer:0,explanation:"Artificial neural networks are loosely inspired by biological neural networks."},
+{question:"Which task is NLP commonly used for?",options:["Sentiment analysis","Power supply","Cable testing","CPU cooling"],answer:0,explanation:"Sentiment analysis determines opinions or emotions in text."},
+{question:"What is reinforcement learning based on?",options:["Rewards and penalties","Only labeled images","Fixed database queries","Manual sorting"],answer:0,explanation:"An agent learns through interactions and reward signals."},
+{question:"What is overfitting?",options:["Model performs well on new data","Model memorizes training data and generalizes poorly","Data is deleted","Training never starts"],answer:1,explanation:"Overfitting occurs when a model fits training data too closely."},
+{question:"Which library is popular for machine learning in Python?",options:["Scikit-learn","Paint","Notepad","Calculator"],answer:0,explanation:"Scikit-learn provides many machine learning algorithms."},
+{question:"What does a training dataset do?",options:["Trains a model","Deletes the model","Only displays output","Encrypts the CPU"],answer:0,explanation:"Training data is used to learn model parameters."},
+{question:"What is generative AI designed to do?",options:["Generate new content","Only delete files","Only connect wires","Turn off networks"],answer:0,explanation:"Generative AI can create text, images, audio, and other content."},
+{question:"Which is a common AI evaluation metric for classification?",options:["Accuracy","Screen size","Battery voltage","File extension"],answer:0,explanation:"Accuracy measures the proportion of correct predictions."},
+{question:"What is a chatbot?",options:["A conversational software system","A storage device","A programming cable","An operating system"],answer:0,explanation:"A chatbot interacts with users through conversation."}
+]
+};
+
+
+// ==========================================
+// ADDITIONAL SUBJECTS — COMMON QUESTION SETS
+// ==========================================
+
+const commonQuestions = [
+{question:"Which of the following is correct?",options:["Option A","Option B","Option C","All of the above"],answer:3,explanation:"Review the fundamental concepts of this subject."},
+{question:"Which term is most closely related to this subject?",options:["Concept 1","Concept 2","Concept 3","Concept 4"],answer:0,explanation:"This is a fundamental concept in the topic."},
+{question:"Which is an important basic principle?",options:["Principle A","Principle B","Principle C","None"],answer:1,explanation:"This principle is commonly used in introductory studies."},
+{question:"What is the main purpose of studying this subject?",options:["Understanding concepts","Memorizing without understanding","Avoiding practice","None"],answer:0,explanation:"Understanding concepts and applying them is the main objective."},
+{question:"Which skill is useful for this subject?",options:["Analytical thinking","Ignoring details","Guessing only","Avoiding practice"],answer:0,explanation:"Analytical thinking helps solve subject-related problems."}
+];
+  // ==========================================
+// PART 3 — QUIZ ENGINE + ALL SUBJECTS
+// ==========================================
+
+// Add 15 questions to subjects without a dedicated bank
+function getSubjectQuestions(subject) {
+    let bank = quizDatabase[subject];
+
+    if (bank && bank.length >= 15) {
+        return [...bank];
+    }
+
+    let extra = commonQuestions.map((q, i) => ({
+        ...q,
+        question: q.question.replace(
+            "this subject",
+            subject
+        )
+    }));
+
+    bank = bank ? [...bank, ...extra] : [...extra];
+
+    // Extend to minimum 15 questions
+    while (bank.length < 15) {
+        const base = commonQuestions[bank.length % commonQuestions.length];
+
+        bank.push({
+            ...base,
+            question: `${subject}: ${base.question}`
+        });
+    }
+
+    return bank.slice(0, 15);
+}
+
+
+// ==========================================
+// QUIZ VARIABLES
+// ==========================================
+
+let questions = [];
+let currentIndex = 0;
+let currentCategory = "";
+let score = 0;
+let selectedAnswer = null;
+let timerInterval = null;
+let timeLeft = 30;
+let answered = false;
+let totalAnswered = 0;
+
+
+// ==========================================
+// PAGE NAVIGATION
+// ==========================================
+
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    const target = document.getElementById(pageId);
+
+    if (target) {
+        target.classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+function goHome() {
+    clearInterval(timerInterval);
+    showPage("homePage");
+}
+
+
+// ==========================================
+// RENDER SUBJECT CARDS
+// ==========================================
+
+function renderCategories(list = categories) {
+    const container = document.getElementById("categoriesContainer");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    list.forEach((category, index) => {
+        const total = getSubjectQuestions(category.name).length;
+
+        const card = document.createElement("div");
+        card.className = "category-card";
+
+        card.innerHTML = `
+            <div class="category-icon">
+                ${category.icon}
+            </div>
+
+            <h3>${escapeHTML(category.name)}</h3>
+
+            <p>${total} Questions • Start Quiz →</p>
+        `;
+
+        card.addEventListener("click", () => {
+            startQuiz(category.name);
+        });
+
+        container.appendChild(card);
+    });
+}
+
+
+// ==========================================
+// SEARCH SUBJECTS
+// ==========================================
+
+function searchCategories() {
+    const input = document.getElementById("searchInput");
+
+    const value = input.value.toLowerCase().trim();
+
+    const filtered = categories.filter(category =>
+        category.name.toLowerCase().includes(value)
+    );
+
+    renderCategories(filtered);
+}
+
+
+// ==========================================
+// SCROLL TO SUBJECTS
+// ==========================================
+
+function scrollToSubjects() {
+    const section = document.getElementById("subjectsSection");
+
+    if (section) {
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+
+// ==========================================
+// START QUIZ
+// ==========================================
+
+function startQuiz(subject) {
+    clearInterval(timerInterval);
+
+    currentCategory = subject;
+    questions = getSubjectQuestions(subject);
+
+    // Shuffle questions
+    questions = shuffleArray(questions);
+
+    currentIndex = 0;
+    score = 0;
+    totalAnswered = 0;
+
+    document.getElementById("quizCategory").textContent = subject;
+
+    document.getElementById("scoreDisplay").textContent = "Score: 0";
+
+    showPage("quizPage");
+
+    loadQuestion();
+}
+
+
+// ==========================================
+// LOAD QUESTION
+// ==========================================
+
+function loadQuestion() {
+    clearInterval(timerInterval);
+
+    if (currentIndex >= questions.length) {
+        showResults();
+        return;
+    }
+
+    selectedAnswer = null;
+    answered = false;
+    timeLeft = 30;
+
+    const question = questions[currentIndex];
+
+    document.getElementById("questionNumber").textContent =
+        `Question ${currentIndex + 1} / ${questions.length}`;
+
+    document.getElementById("questionText").textContent =
+        question.question;
+
+    document.getElementById("progressBar").style.width =
+        `${((currentIndex + 1) / questions.length) * 100}%`;
+
+    document.getElementById("nextBtn").textContent =
+        currentIndex === questions.length - 1
+            ? "Finish Quiz 🏆"
+            : "Next →";
+
+    const optionsContainer = document.getElementById("optionsContainer");
+
+    optionsContainer.innerHTML = "";
+
+    question.options.forEach((option, index) => {
+        const button = document.createElement("button");
+
+        button.className = "option";
+
+        button.textContent =
+            `${String.fromCharCode(65 + index)}. ${option}`;
+
+        button.addEventListener("click", () => selectAnswer(index));
+
+        optionsContainer.appendChild(button);
+    });
+
+    updateTimerDisplay();
+
+    startTimer();
+}
+
+
+// ==========================================
+// SELECT ANSWER
+// ==========================================
+
+function selectAnswer(index) {
+    if (answered) return;
+
+    selectedAnswer = index;
+    answered = true;
+
+    clearInterval(timerInterval);
+
+    const question = questions[currentIndex];
+
+    const options = document.querySelectorAll(".option");
+
+    options.forEach((option, i) => {
+        option.disabled = true;
+
+        if (i === question.answer) {
+            option.classList.add("correct");
+        }
+
+        if (i === index && index !== question.answer) {
+            option.classList.add("wrong");
+        }
+    });
+
+    if (index === question.answer) {
+        score++;
+        document.getElementById("scoreDisplay").textContent =
+            `Score: ${score}`;
+    }
+
+    totalAnswered++;
+
+    // Show explanation
+    const explanation = document.createElement("div");
+
+    explanation.style.marginTop = "20px";
+    explanation.style.padding = "15px";
+    explanation.style.borderRadius = "12px";
+    explanation.style.background = "var(--bg)";
+    explanation.style.border = "1px solid var(--border)";
+
+    explanation.innerHTML = `
+        <strong>💡 Explanation:</strong>
+        ${escapeHTML(question.explanation || "Correct answer shown above.")}
+    `;
+
+    document.getElementById("optionsContainer")
+        .appendChild(explanation);
+}
+
+
+// ==========================================
+// TIMER
+// ==========================================
+
+function startTimer() {
+    updateTimerDisplay();
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+
+            if (!answered) {
+                selectAnswer(-1);
+            }
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const timer = document.getElementById("timer");
+
+    timer.textContent = `⏱ ${timeLeft}`;
+
+    if (timeLeft <= 10) {
+        timer.style.color = "#ef4444";
+    } else {
+        timer.style.color = "#ec4899";
+    }
+}
+
+
+// ==========================================
+// NEXT QUESTION
+// ==========================================
+
+function nextQuestion() {
+    if (!answered) {
+        selectAnswer(-1);
+        return;
+    }
+
+    currentIndex++;
+
+    if (currentIndex >= questions.length) {
+        showResults();
+    } else {
+        loadQuestion();
+    }
+}
+
+
+// ==========================================
+// SHOW RESULTS
+// ==========================================
+
+function showResults() {
+    clearInterval(timerInterval);
+
+    showPage("resultPage");
+
+    const finalScore = document.getElementById("finalScore");
+
+    finalScore.textContent =
+        `${score} / ${questions.length}`;
+
+    const percentage =
+        Math.round((score / questions.length) * 100);
+
+    let message = "";
+
+    if (percentage >= 90) {
+        message = "🏆 Excellent! You are a Quiz Master!";
+    } else if (percentage >= 70) {
+        message = "🔥 Great job! Keep learning!";
+    } else if (percentage >= 50) {
+        message = "👏 Good effort! Practice makes perfect.";
+    } else {
+        message = "💪 Keep practicing. You will improve!";
+    }
+
+    document.getElementById("resultMessage").textContent =
+        `${message} Your accuracy: ${percentage}%`;
+
+    saveQuizResult(currentCategory, score, questions.length);
+}
+
+
+// ==========================================
+// SAVE QUIZ RESULT
+// ==========================================
+
+function saveQuizResult(subject, correct, total) {
+    try {
+        let history = JSON.parse(
+            localStorage.getItem("quizHistory") || "[]"
+        );
+
+        history.push({
+            subject: subject,
+            correct: correct,
+            total: total,
+            date: new Date().toISOString()
+        });
+
+        localStorage.setItem(
+            "quizHistory",
+            JSON.stringify(history)
+        );
+
+    } catch (error) {
+        console.warn("Could not save quiz history:", error);
+    }
+}
+
+
+// ==========================================
+// SHUFFLE ARRAY
+// ==========================================
+
+function shuffleArray(array) {
+    const result = [...array];
+
+    for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [result[i], result[j]] = [result[j], result[i]];
+    }
+
+    return result;
+}
+
+
+// ==========================================
+// SAFE HTML ESCAPING
+// ==========================================
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+
+// ==========================================
+// DARK / LIGHT MODE
+// ==========================================
+
+function toggleTheme() {
+    document.body.classList.toggle("light-mode");
+
+    const light = document.body.classList.contains("light-mode");
+
+    document.getElementById("themeBtn").textContent =
+        light ? "☀️" : "🌙";
+
+    localStorage.setItem("quizTheme", light ? "light" : "dark");
+}
+
+function loadTheme() {
+    const theme = localStorage.getItem("quizTheme");
+
+    if (theme === "light") {
+        document.body.classList.add("light-mode");
+
+        document.getElementById("themeBtn").textContent = "☀️";
+    }
+}
+
+
+// ==========================================
+// DASHBOARD STATS
+// ==========================================
+
+function updateDashboard() {
+    let total = 0;
+
+    categories.forEach(category => {
+        total += getSubjectQuestions(category.name).length;
+    });
+
+    document.getElementById("totalQuestions").textContent =
+        total.toLocaleString() + "+";
+
+    document.getElementById("totalSubjects").textContent =
+        categories.length + "+";
+}
+
+
+// ==========================================
+// INITIALIZE WEBSITE
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderCategories();
+    updateDashboard();
+    loadTheme();
+});
+  // ==========================================
+// PART 4 — SUPABASE INTEGRATION
+// ==========================================
+
+const SUPABASE_URL =
+    "https://iokwwpdunvdndzcgpovw.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_q8ZxSv1YOJY2E17BXhKNYg_ZKE6IMy";
+
+
+// ==========================================
+// FETCH ONLINE QUESTIONS
+// ==========================================
+
+async function fetchQuestionsFromSupabase(subject, count = 15) {
+
+    try {
+
+        const response = await fetch(
+            `${SUPABASE_URL}/rest/v1/questions?select=*&subject=eq.${encodeURIComponent(subject)}&limit=${count}`,
+            {
+                method: "GET",
+
+                headers: {
+                    "apikey": SUPABASE_KEY,
+
+                    "Authorization": `Bearer ${SUPABASE_KEY}`,
+
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Supabase request failed");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            return [];
+        }
+
+        return data.map(item => ({
+            question: item.question || item.question_text || "",
+
+            options: Array.isArray(item.options)
+                ? item.options
+                : [
+                    item.option_a,
+                    item.option_b,
+                    item.option_c,
+                    item.option_d
+                ],
+
+            answer: Number(
+                item.answer ?? item.correct_answer ?? 0
+                ),
+
+            explanation: item.explanation || ""
+        }));
+
+    } catch (error) {
+
+        console.warn(
+            "Supabase unavailable. Using local questions.",
+            error
+        );
+
+        return [];
+    }
+}
+
+
+// ==========================================
+// OPTIONAL ONLINE QUIZ START
+// ==========================================
+
+async function startOnlineQuiz(subject) {
+
+    const onlineQuestions =
+        await fetchQuestionsFromSupabase(subject, 15);
+
+    if (onlineQuestions.length >= 5) {
+
+        clearInterval(timerInterval);
+
+        currentCategory = subject;
+
+        questions = shuffleArray(onlineQuestions);
+
+        currentIndex = 0;
+        score = 0;
+        totalAnswered = 0;
+
+        document.getElementById("quizCategory").textContent =
+            subject;
+
+        document.getElementById("scoreDisplay").textContent =
+            "Score: 0";
+
+        showPage("quizPage");
+
+        loadQuestion();
+
+    } else {
+
+        // Offline fallback
+        startQuiz(subject);
+
+    }
+}
+
+
+// ==========================================
+// NETWORK STATUS
+// ==========================================
+
+function checkConnection() {
+
+    if (navigator.onLine) {
+
+        console.log("🌐 Internet connected");
+
+    } else {
+
+        console.log("📴 Offline mode enabled");
+    }
+}
+
+window.addEventListener("online", checkConnection);
+
+window.addEventListener("offline", checkConnection);
+
+
+// ==========================================
+// KEYBOARD SUPPORT
+// ==========================================
+
+document.addEventListener("keydown", function(event) {
+
+    if (!document.getElementById("quizPage").classList.contains("active")) {
+        return;
+    }
+
+    if (event.key >= "1" && event.key <= "4") {
+
+        const index = Number(event.key) - 1;
+
+        selectAnswer(index);
+
+    }
+
+    if (event.key === "Enter") {
+
+        nextQuestion();
+
+    }
+
+});
+
+
+// ==========================================
+// FINAL INITIALIZATION
+// ==========================================
+
+console.log("🎯 Quiz Master Pro initialized successfully!");
+
+</script>
+
+</body>
+</html>
